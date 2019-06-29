@@ -2,9 +2,10 @@
     "name": "pingu/installer",
     "license": "MIT",
     "autoload": {
-        "psr-4": {"PinguInstaller\\": "src/"}
+        "psr-4": {"PinguInstaller\\": "src/"},
+        "files": [
+	    	"src/helpers.php"
+	    ]
     },
-    "files": [
-    	"helpers.php"
-    ]
+    "minimum-stability": "dev"
 }
