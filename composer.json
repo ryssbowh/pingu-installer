@@ -1,0 +1,10 @@
+{
+    "name": "pingu/installer",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {"PinguInstaller\\": "src/"}
+    },
+    "files": [
+    	"helpers.php"
+    ]
+}
