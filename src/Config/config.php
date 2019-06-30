@@ -12,10 +12,7 @@ return [
             'cURL',
         ],
         'apache' => [
-            'mod_rewrite',
-        ],
-        'commands' => [
-        	'npm -v' => '4'
+            'mod_rewrite'
         ]
 	],
     'permissions' => [
@@ -25,23 +22,46 @@ return [
 	],
 	'env' => [
 		'APP_NAME' => [
-			'name' => 'Site name',
-			'type' => 'open'
+			'label' => 'Site name',
+			'type' => 'text',
+			'validation' => 'required',
+			'messages' => [
+				'APP_NAME.required' => 'Site name is required'
+			]
 		],
 		'APP_ENV' => [
-			'name' => 'Environment',
-			'type' => 'choice',
-			'values' => ['local', 'production']
+			'label' => 'Environment',
+			'type' => 'select',
+			'values' => ['local' => 'Local', 'production' => 'Production'],
+			'validation' => 'required|in:local,production',
+			'messages' => [
+				'APP_ENV.required' => 'Environment is required',
+				'APP_ENV.in' => 'Environment is invalid'
+			]
 		],
 		'APP_DEBUG' => [
-			'name' => 'Debug mode',
-			'type' => 'choice',
-			'values' => ['true', 'false']
+			'label' => 'Debug mode',
+			'type' => 'select',
+			'values' => ['true' => 'Yes', 'false' => 'No'],
+			'validation' => 'required|in:true,false',
+			'messages' => [
+				'APP_DEBUG.required' => 'Debug mode is required',
+				'APP_DEBUG.in' => 'Debug mode is invalid'
+			]
 		],
 		'APP_URL' => [
-			'name' => 'Site url',
-			'type' => 'open',
-			'filter' => FILTER_VALIDATE_URL
+			'label' => 'Site url',
+			'type' => 'text',
+			'validation' => 'required|url',
+			'messages' => [
+				'APP_URL.required' => 'Site name is required',
+				'APP_URL.url' => 'Site name is an invalid url'
+			]
 		]
-	]
+	],
+	'drivers' => [
+		'mysql' => 'MySql'
+	],
+	'minNpmVersion' => '6.0.0',
+	'mandatoryModules' => ['Core', 'Content', 'Forms', 'Jsgrid', 'Media', 'Menu', 'Page', 'Permissions', 'Settings', 'User']
 ];

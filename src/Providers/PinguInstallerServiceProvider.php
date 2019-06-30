@@ -5,6 +5,7 @@ namespace PinguInstaller\Providers;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use PinguInstaller\Http\Middleware\AlreadyInstalled;
 use PinguInstaller\Http\Middleware\RedirectToInstall;
 
 class PinguInstallerServiceProvider extends ServiceProvider
@@ -25,17 +26,22 @@ class PinguInstallerServiceProvider extends ServiceProvider
     {
         $this->registerConfig();
         $this->registerViews();
+        $this->registerAssets();
         /**
          * Creates a new middleware group 'install' and add a installation check on all web routes
          */
-        $web = $router->getMiddlewareGroups()['web'];
-        foreach($web as $middleware){
-            $router->pushMiddlewareToGroup('install', $middleware);
+        if(!$this->app->runningInConsole()){
+            $web = $router->getMiddlewareGroups()['web'];
+            foreach($web as $middleware){
+                $router->pushMiddlewareToGroup('install', $middleware);
+            }
+            if(!pingu_installed()){
+                $router->prependMiddlewareToGroup('web', RedirectToInstall::class);
+            }
+
+            \Asset::container('installer')->add('js', 'vendor/installer/installer.js');
+            \Asset::container('installer')->add('css', 'vendor/installer/installer.css');
         }
-        if(!pingu_installed()){
-            $router->prependMiddlewareToGroup('web', RedirectToInstall::class);
-        }
-        
     }
 
     /**
@@ -55,6 +61,9 @@ class PinguInstallerServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
+        $this->mergeConfigFrom(
+            __DIR__.'/../Config/config.php', 'installer'
+        );
         $this->publishes([
             __DIR__.'/../Config/config.php' => config_path('installer.php'),
         ], 'installer');
@@ -67,15 +76,16 @@ class PinguInstallerServiceProvider extends ServiceProvider
      */
     public function registerViews()
     {
-        $viewPath = resource_path('views/vendor/installer');
-
         $sourcePath = __DIR__.'/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ],'installer');
-
         $this->loadViewsFrom($sourcePath, 'installer');
+    }
+
+    public function registerAssets()
+    {
+        $this->publishes([
+            __DIR__.'/../Resources/assets/public' => public_path('vendor/installer')
+        ],'installer');
     }
 
     /**

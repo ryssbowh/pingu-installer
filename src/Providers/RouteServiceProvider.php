@@ -23,8 +23,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        Route::middleware('install')
-            ->namespace($this->namespace)
-            ->group(__DIR__ . '/../Routes/web.php');
+        if(!pingu_installed()){
+            Route::middleware('install')
+                ->namespace($this->namespace)
+                ->group(__DIR__ . '/../Routes/web.php');
+        }
     }
 }
