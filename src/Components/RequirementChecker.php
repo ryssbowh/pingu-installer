@@ -9,21 +9,34 @@ class RequirementChecker
 	protected $checks = [];
 	protected $failure = false;
 
+	/**
+	 * Checks all requirements
+	 * 
+	 * @return array
+	 */
 	public function checkAll(){
 		$this->checkPhp();
 		$this->checkPhpExtensions();
 		$this->checkApacheExtensions();
 		$this->checkPermissions();
-		$this->checkCommands();
+		$this->checkNpm();
 		$this->checkApacheFolderPermissions();
 		return $this->checks;
 	}
 
+	/**
+	 * Has at least one requirement failed
+	 * 
+	 * @return boolean
+	 */
 	public function hasFailed()
 	{
 		return $this->failure;
 	}
 
+	/**
+	 * Checks php min version
+	 */
 	public function checkPhp()
 	{
 		if(version_compare(phpversion(), config('installer.phpMinVersion')) >= 0){
@@ -35,6 +48,12 @@ class RequirementChecker
         }
 	}
 
+	/**
+	 * Runs a bash command and return output
+	 * 
+	 * @param  string|array $command
+	 * @return string
+	 */
 	protected function runCommand($command)
 	{
 		$command = new Process($command);
@@ -44,6 +63,9 @@ class RequirementChecker
 		return preg_replace('/\s\s+/', '', $output);
 	}
 
+	/**
+	 * Checks that apache can write on its home folder (usually /var/www), it will need it to run npm
+	 */
 	public function checkApacheFolderPermissions()
 	{
 		$user = $this->runCommand('whoami');
@@ -62,6 +84,9 @@ class RequirementChecker
 		}
 	}
 
+	/**
+	 * Checks php extensions
+	 */
 	public function checkPhpExtensions()
 	{
 		foreach(config('installer.requirements.php') as $extension){
@@ -75,6 +100,9 @@ class RequirementChecker
         }
 	}
 
+	/**
+	 * Checks apache extensions
+	 */
 	public function checkApacheExtensions()
 	{
 		$modules = apache_get_modules();
@@ -89,6 +117,9 @@ class RequirementChecker
         }
 	}
 
+	/**
+	 * Checks folder permissions
+	 */
 	public function checkPermissions()
 	{
 		foreach(config('installer.permissions') as $folder => $perm){
@@ -103,7 +134,10 @@ class RequirementChecker
         }
 	}
 
-	public function checkCommands()
+	/**
+	 * Checks npm version
+	 */
+	public function checkNpm()
 	{
 		$minVersion = config('installer.minNpmVersion');
 		$npmVersion = $this->runCommand('npm --version');

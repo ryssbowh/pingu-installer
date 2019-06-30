@@ -85,7 +85,7 @@ class PinguInstallerServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../Resources/assets/public' => public_path('vendor/installer')
-        ],'installer');
+        ],'installer-assets');
     }
 
     /**

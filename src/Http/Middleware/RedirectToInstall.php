@@ -8,7 +8,7 @@ use Closure;
 class RedirectToInstall
 {
 	/**
-     * Handle an incoming request.
+     * Redirects to /install if the storage/installed file doesnt exist
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next

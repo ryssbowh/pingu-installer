@@ -33,8 +33,6 @@ Route::get('install/step/env', 'InstallerController@stepEnv')
 	->name('install.steps.env');
 Route::get('install/step/modules', 'InstallerController@stepModules')
 	->name('install.steps.modules');
-Route::get('install/step/config', 'InstallerController@stepConfig')
-	->name('install.steps.config');
 Route::get('install/step/migrate', 'InstallerController@stepMigrate')
 	->name('install.steps.migrate');
 Route::get('install/step/migrateModules', 'InstallerController@stepMigrateModules')
@@ -47,8 +45,6 @@ Route::get('install/step/assets', 'InstallerController@stepAssets')
 	->name('install.steps.assets');
 Route::get('install/step/symStorage', 'InstallerController@stepSymStorage')
 	->name('install.steps.symStorage');
-Route::get('install/step/symModules', 'InstallerController@stepSymModules')
-	->name('install.steps.symModules');
 Route::get('install/step/symThemes', 'InstallerController@stepSymThemes')
 	->name('install.steps.symThemes');
 Route::get('install/step/cache', 'InstallerController@stepCache')

@@ -16,9 +16,6 @@
 	  	<div class="step" data-url="{{ route('install.steps.modules')}}">
 	  		<p>Enable modules... <i class="float-right fa fa-check d-none"></i></p>
 	  	</div>
-	  	<div class="step" data-url="{{ route('install.steps.config')}}">
-	  		<p>Publish module config... <i class="float-right fa fa-check d-none"></i></p>
-	  	</div>
 	  	<div class="step" data-url="{{ route('install.steps.migrate')}}">
 	  		<p>Migrate laravel... <i class="float-right fa fa-check d-none"></i></p>
 	  	</div>
@@ -36,9 +33,6 @@
 	  	</div>
 	  	<div class="step" data-url="{{ route('install.steps.symStorage')}}">
 	  		<p>Symlink storage... <i class="float-right fa fa-check d-none"></i></p>
-	  	</div>
-	  	<div class="step" data-url="{{ route('install.steps.symModules')}}">
-	  		<p>Symlink modules... <i class="float-right fa fa-check d-none"></i></p>
 	  	</div>
 	  	<div class="step" data-url="{{ route('install.steps.symThemes')}}">
 	  		<p>Symlink themes... <i class="float-right fa fa-check d-none"></i></p>

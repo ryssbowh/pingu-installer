@@ -28,6 +28,11 @@ class ModuleRequest extends FormRequest
         return [];
     }
 
+    /**
+     * Checks that modules in post exist on disk
+     * 
+     * @param  Validator $validator
+     */
     public function withValidator(Validator $validator)
     {
         $validator->after(function (Validator $validator) {

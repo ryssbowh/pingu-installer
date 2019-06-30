@@ -15,8 +15,15 @@ use Symfony\Component\Process\Process;
 
 class InstallPreparationController extends Controller
 {
+    /**
+     * Publish installer assets and check server requirements
+     * 
+     * @param  Request $request
+     * @return view
+     */
     public function requirements(Request $request)
     {
+        \Artisan::run('vendor:publish', ['--tag' => 'installer-assets']);
         $checker = new RequirementChecker;
         $checks = $checker->checkAll();
         $failure = $checker->hasFailed();
@@ -27,6 +34,12 @@ class InstallPreparationController extends Controller
         return view('installer::requirements')->with(['checks' => $checks, 'failure' => $failure]);
     }
 
+    /**
+     * .env file
+     * 
+     * @param  Request $request
+     * @return view
+     */
     public function env(Request $request)
     {
         if(!session('installer.requirements', false)){
@@ -35,6 +48,12 @@ class InstallPreparationController extends Controller
         return view('installer::env');
     }
 
+    /**
+     * .env file post handler
+     * 
+     * @param  EnvRequest $request
+     * @return redirect
+     */
     public function postEnv(EnvRequest $request)
     {
         if(!session('installer.requirements', false)){
@@ -45,6 +64,12 @@ class InstallPreparationController extends Controller
         return redirect()->route('install.modules');
     }
 
+    /**
+     * Builds module list (mandatory and optionnal) from disk
+     * 
+     * @param  Request $request
+     * @return view
+     */
     public function modules(Request $request)
     {
         if(!session('installer.env', false)){
@@ -67,6 +92,12 @@ class InstallPreparationController extends Controller
         return view('installer::modules')->with(['mandatory' => $mandatory, 'optionnal' => $optionnal]);
     }
 
+    /**
+     * Modules post handler
+     * 
+     * @param  ModuleRequest $request
+     * @return redirect
+     */
     public function postModules(ModuleRequest $request)
     {
         if(!session('installer.env', false)){
@@ -78,6 +109,12 @@ class InstallPreparationController extends Controller
         return redirect()->route('install.perform');
     }
 
+    /**
+     * Perform install view
+     * 
+     * @param  Request $request
+     * @return view
+     */
     public function perform(Request $request)
     {
         if(!session('installer.modules', false)){

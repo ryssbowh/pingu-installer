@@ -15,6 +15,12 @@ use Symfony\Component\Process\Process;
 
 class InstallerController extends Controller
 {
+    /**
+     * Check if last step was done (from session)
+     * 
+     * @param  Request $request
+     * @throws HttpException
+     */
     protected function checkSession(Request $request)
     {
         if(!session('installer.modules', false)){
@@ -22,12 +28,26 @@ class InstallerController extends Controller
         }
     }
 
+    /**
+     * Runs an artisan command
+     * 
+     * @param  string $command
+     * @param  array  $options
+     * @return array
+     */
     protected function runArtisanCommand(string $command, array $options = [])
     {
         \Artisan::call($command, $options);
         return [];
     }
 
+    /**
+     * Runs a bash command and returns output
+     * 
+     * @param  string|array $command
+     * @return string
+     * @throws ProcessFailedException
+     */
     protected function runCommand($command)
     {
         chdir(base_path());
@@ -39,6 +59,12 @@ class InstallerController extends Controller
         return str_replace("\n", '', $process->getOutput());
     }
 
+    /**
+     * Writes .env file on disk
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepEnv(Request $request)
     {
         $this->checkSession($request);
@@ -50,12 +76,12 @@ class InstallerController extends Controller
         return [];
     }
 
-    public function stepConfig(Request $request)
-    {
-        $this->checkSession($request);
-        return $this->runArtisanCommand('module:publish-config');
-    }
-
+    /**
+     * Activates chosen modules
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepModules(Request $request)
     {
         $this->checkSession($request);
@@ -65,24 +91,48 @@ class InstallerController extends Controller
         return [];
     }
 
+    /**
+     * Run migrate comamnd
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepMigrate(Request $request)
     {
         $this->checkSession($request);
         return $this->runArtisanCommand('migrate');
     }
 
+    /**
+     * Run module:migrate command
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepMigrateModules(Request $request)
     {
         $this->checkSession($request);
         return $this->runArtisanCommand('module:migrate');
     }
 
+    /**
+     * Run module:seed command
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepSeed(Request $request)
     {
         $this->checkSession($request);
         return $this->runArtisanCommand('module:seed');
     }
 
+    /**
+     * install npm dependencies
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepNode(Request $request)
     {
         $this->checkSession($request);
@@ -91,6 +141,12 @@ class InstallerController extends Controller
         return [];
     }
 
+    /**
+     * Builds assets
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepAssets(Request $request)
     {
         $this->checkSession($request);
@@ -99,24 +155,36 @@ class InstallerController extends Controller
         return [];
     }
 
+    /**
+     * Symlink storage
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepSymStorage(Request $request)
     {
         $this->checkSession($request);
         return $this->runArtisanCommand('storage:link');
     }
 
-    public function stepSymModules(Request $request)
-    {
-        $this->checkSession($request);
-        return $this->runArtisanCommand('module:link');
-    }
-
+    /**
+     * Symlink themes
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepSymThemes(Request $request)
     {
         $this->checkSession($request);
         return $this->runArtisanCommand('theme:link');
     }
 
+    /**
+     * Clears cache and calls final method
+     * 
+     * @param  Request $request
+     * @return array
+     */
     public function stepCache(Request $request)
     {
         $this->checkSession($request);
@@ -124,6 +192,13 @@ class InstallerController extends Controller
         return $this->stepFinal($request);
     }
 
+    /**
+     * Finalise installation. Creates installed file in storage,
+     * throws an event, empties session and generates a key to .env file
+     * 
+     * @param  Request $request
+     * @return array
+     */
     protected function stepFinal(Request $request)
     {
         $this->checkSession($request);
@@ -134,6 +209,12 @@ class InstallerController extends Controller
         return [];
     }
 
+    /**
+     * Generates a random key
+     * 
+     * @param  Request $request
+     * @return string
+     */
     protected function generateRandomKey()
     {
         return 'base64:'.base64_encode(
