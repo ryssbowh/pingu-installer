@@ -23,7 +23,7 @@ class InstallPreparationController extends Controller
      */
     public function requirements(Request $request)
     {
-        \Artisan::run('vendor:publish', ['--tag' => 'installer-assets']);
+        \Artisan::call('vendor:publish', ['--tag' => 'installer-assets']);
         $checker = new RequirementChecker;
         $checks = $checker->checkAll();
         $failure = $checker->hasFailed();
