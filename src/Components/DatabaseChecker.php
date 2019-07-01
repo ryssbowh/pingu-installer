@@ -1,6 +1,8 @@
 <?php
 namespace PinguInstaller\Components;
 
+use PinguInstaller\Exceptions\DriverNotInstalled;
+
 class DatabaseChecker
 {
 	/**
@@ -33,12 +35,9 @@ class DatabaseChecker
 	 */
 	public static function checkMysql(string $host, string $name, string $username, string $password)
 	{
-		try{
-            $con = mysqli_connect($host, $username, $password, $name);
-        }
-        catch(\ErrorException $e){
-            return false;
-        }
-        return true;
+		if(in_array($host, ['127.0.0.1', 'localhost']) and !function_exists('mysqli_connect')){
+			throw new DriverNotInstalled('Mysql driver is not installed');
+		}
+        $con = mysqli_connect($host, $username, $password, $name);
 	}
 }

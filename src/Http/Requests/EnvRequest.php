@@ -5,6 +5,7 @@ namespace PinguInstaller\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use PinguInstaller\Components\DatabaseChecker;
+use PinguInstaller\Exceptions\DriverNotInstalled;
 
 class EnvRequest extends FormRequest
 {
@@ -53,8 +54,14 @@ class EnvRequest extends FormRequest
     {
         $validator->after(function (Validator $validator) {
         	$validated = $validator->validated();
-            if(!DatabaseChecker::checkConnection($validated['DB_CONNECTION'], $validated['DB_HOST'], $validated['DB_DATABASE'], $validated['DB_USERNAME'], $validated['DB_PASSWORD'])){
-            	$validator->errors()->add('DB_NAME', 'Cannot connect to database with these credentials');
+            try{
+                DatabaseChecker::checkConnection($validated['DB_CONNECTION'], $validated['DB_HOST'], $validated['DB_DATABASE'], $validated['DB_USERNAME'], $validated['DB_PASSWORD']);
+            }
+            catch(DriverNotInstalled $e){
+            	$validator->errors()->add('DB_NAME', $e->getMessage());
+            }
+            catch(\ErrorException $e){
+                $validator->errors()->add('DB_NAME', 'Cannot connect to database with these credentials');
             }
         });
     }   
