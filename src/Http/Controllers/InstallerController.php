@@ -15,6 +15,10 @@ use Symfony\Component\Process\Process;
 
 class InstallerController extends Controller
 {
+    public function __construct()
+    {
+        ini_set('max_execution_time', 0);
+    }
     /**
      * Check if last step was done (from session)
      * 
