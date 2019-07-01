@@ -136,6 +136,7 @@ class InstallerController extends Controller
     public function stepNode(Request $request)
     {
         $this->checkSession($request);
+        \File::put(base_path('package.json'), '{}');
         $this->runCommand('npm run merge');
         $this->runCommand('npm install');
         return [];
