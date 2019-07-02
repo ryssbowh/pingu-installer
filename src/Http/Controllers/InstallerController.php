@@ -56,6 +56,7 @@ class InstallerController extends Controller
     {
         chdir(base_path());
         $process = new Process($command);
+        $process->setTimeout(300);
         $process->run();
         if(!$process->isSuccessful()){
             throw new ProcessFailedException($process);
