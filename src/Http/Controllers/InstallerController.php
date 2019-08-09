@@ -97,18 +97,6 @@ class InstallerController extends Controller
     }
 
     /**
-     * Run migrate comamnd
-     * 
-     * @param  Request $request
-     * @return array
-     */
-    public function stepMigrate(Request $request)
-    {
-        $this->checkSession($request);
-        return $this->runArtisanCommand('migrate');
-    }
-
-    /**
      * Run module:migrate command
      * 
      * @param  Request $request
@@ -208,7 +196,7 @@ class InstallerController extends Controller
     protected function stepFinal(Request $request)
     {
         $this->checkSession($request);
-        \File::put(storage_path('installed'),'');
+        \File::put(storage_path('installed'),time());
         event(new PinguInstalled);
         $request->session()->forget('installer');
         \File::append(base_path('.env'), 'APP_KEY='.$this->generateRandomKey());

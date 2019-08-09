@@ -33,8 +33,6 @@ Route::get('install/step/env', 'InstallerController@stepEnv')
 	->name('install.steps.env');
 Route::get('install/step/modules', 'InstallerController@stepModules')
 	->name('install.steps.modules');
-Route::get('install/step/migrate', 'InstallerController@stepMigrate')
-	->name('install.steps.migrate');
 Route::get('install/step/migrateModules', 'InstallerController@stepMigrateModules')
 	->name('install.steps.migrateModules');
 Route::get('install/step/seed', 'InstallerController@stepSeed')
