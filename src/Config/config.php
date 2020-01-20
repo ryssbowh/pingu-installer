@@ -63,5 +63,5 @@ return [
         'mysql' => 'MySql'
     ],
     'minNpmVersion' => '6.0.0',
-    'mandatoryModules' => ['Core', 'Entity', 'Block', 'Content', 'Forms', 'Media', 'Menu', 'Page', 'Permissions', 'Settings', 'User', 'Taxonomy']
+    'mandatoryModules' => ['Core', 'Entity', 'Field', 'Block', 'Content', 'Forms', 'Media', 'Menu', 'Page', 'Permissions', 'User', 'Taxonomy']
 ];
