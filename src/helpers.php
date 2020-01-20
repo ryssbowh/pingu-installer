@@ -7,9 +7,9 @@ function pingu_installed()
 
 function pingu_installed_time($format = 'd/m/Y')
 {
-	if(pingu_installed()){
-		$timestamp = (int)trim(file_get_contents(storage_path('installed')));
-		return (new DateTime)->setTimestamp($timestamp)->format($format);
-	}
-	return '';
+    if (pingu_installed()) {
+        $timestamp = (int)trim(file_get_contents(storage_path('installed')));
+        return (new DateTime)->setTimestamp($timestamp)->format($format);
+    }
+    return '';
 }
