@@ -77,10 +77,6 @@ class InstallPreparationController extends Controller
         if(!session('installer.env', false)){
             return redirect()->route('install');
         }
-        $modules = \Module::all();
-        usort($modules, function($module1, $module2){
-            return ($module1->get('order') > $module2->get('order')) ? 1 : 0;
-        });
         $mandatory = \Module::getCoreModules();
         $optionnal = \Module::getNonCoreModules();
         return view('installer::modules')->with(['mandatory' => $mandatory, 'optionnal' => $optionnal]);
@@ -97,8 +93,7 @@ class InstallPreparationController extends Controller
         if(!session('installer.env', false)){
             return redirect()->route('install');
         }
-        $optionnal = $request->validated()['modules'] ?? [];
-        $modules = array_merge(config('installer.mandatoryModules'), $optionnal);
+        $modules = $request->validated()['modules'] ?? [];
         session(['installer.modules' => $modules]);
         return redirect()->route('install.perform');
     }
@@ -111,7 +106,7 @@ class InstallPreparationController extends Controller
      */
     public function perform(Request $request)
     {
-        if(!session('installer.modules', false)){
+        if (!is_array(session('installer.modules', false))) {
             return redirect()->route('install');
         }
         return view('installer::perform');

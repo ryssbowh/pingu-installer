@@ -27,7 +27,7 @@ class InstallerController extends Controller
      */
     protected function checkSession(Request $request)
     {
-        if(!session('installer.modules', false)){
+        if (!is_array(session('installer.modules', false))) {
             throw new HttpException(422, "Go away");
         }
     }
@@ -90,7 +90,10 @@ class InstallerController extends Controller
     public function stepModules(Request $request)
     {
         $this->checkSession($request);
-        foreach(session('installer.modules') as $name){
+        foreach (\Module::getCoreModules() as $module) {
+            $module->enable();
+        }
+        foreach (session('installer.modules') as $name) {
             \Module::find($name)->enable();
         }
         return [];
