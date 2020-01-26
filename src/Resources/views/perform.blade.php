@@ -16,6 +16,9 @@
 	  	<div class="step" data-url="{{ route('install.steps.modules')}}">
 	  		<p>Enable modules... <i class="float-right fa fa-check d-none"></i></p>
 	  	</div>
+        <div class="step" data-url="{{ route('install.steps.coreModules')}}">
+            <p>Install Core modules... <i class="float-right fa fa-check d-none"></i></p>
+        </div>
 	  	<div class="step" data-url="{{ route('install.steps.migrateModules')}}">
 	  		<p>Migrate modules... <i class="float-right fa fa-check d-none"></i></p>
 	  	</div>

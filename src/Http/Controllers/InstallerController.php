@@ -97,6 +97,19 @@ class InstallerController extends Controller
     }
 
     /**
+     * Run migrations for core modules that are in the Install folder
+     * 
+     * @param  Request $request
+     * @return array
+     */
+    public function stepInstallCoreModules(Request $request)
+    {
+        $this->checkSession($request);
+        $this->runArtisanCommand('module:reinstall', ['--force' => true]);
+        return [];
+    }
+
+    /**
      * Run module:migrate command
      * 
      * @param  Request $request
