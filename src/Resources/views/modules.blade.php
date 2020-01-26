@@ -12,7 +12,7 @@
 	  			<li class="list-group-item bg-light container">
 	  				<div class="row">
 	  					<div class="text-left col-10">{{ $module->getName() }}<br/><small>{{ $module->getDescription() }}</small></div>
-	  					<div class="text-right col-2">{{ FormFacade::checkbox('modules[]', $module->getname(), true, ['disabled' => true])}}</div>
+	  					<div class="text-right col-2">{{ FormFacade::checkbox('modules[]', $module->getName(), true, ['disabled' => true])}}</div>
 	  				</div>
 	  			</li>
 	  		@endforeach
@@ -20,7 +20,7 @@
 	  			<li class="list-group-item container">
 	  				<div class="row">
 	  					<div class="text-left col-10">{{ $module->getName() }}<br/><small>{{ $module->getDescription() }}</small></div>
-	  					<div class="text-right col-2">{{ FormFacade::checkbox('modules[]', $module->getname())}}</div>
+	  					<div class="text-right col-2">{{ FormFacade::checkbox('modules[]', $module->getName())}}</div>
 	  				</div>
 	  			</li>
 	  		@endforeach

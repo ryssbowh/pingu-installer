@@ -12,9 +12,11 @@ use PinguInstaller\Http\Requests\ModuleRequest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Vkovic\LaravelCommando\Handlers\Database\WithDbHandler;
 
 class InstallPreparationController extends Controller
 {
+    use WithDbHandler;
     /**
      * Publish installer assets and check server requirements
      * 
@@ -23,7 +25,7 @@ class InstallPreparationController extends Controller
      */
     public function requirements(Request $request)
     {
-        \Artisan::call('vendor:publish', ['--tag' => 'installer-assets']);
+        \Artisan::call('vendor:publish', ['--tag' => 'installer-assets', '--force' => true]);
         $checker = new RequirementChecker;
         $checks = $checker->checkAll();
         $failure = $checker->hasFailed();
@@ -79,16 +81,8 @@ class InstallPreparationController extends Controller
         usort($modules, function($module1, $module2){
             return ($module1->get('order') > $module2->get('order')) ? 1 : 0;
         });
-        $mandatory = [];
-        $optionnal = [];
-        foreach($modules as $module){
-            if(in_array($module->getName(), config('installer.mandatoryModules'))){
-                $mandatory[] = $module;
-            }
-            else{
-                $optionnal[] = $module;
-            }
-        }
+        $mandatory = \Module::getCoreModules();
+        $optionnal = \Module::getNonCoreModules();
         return view('installer::modules')->with(['mandatory' => $mandatory, 'optionnal' => $optionnal]);
     }
 
@@ -121,5 +115,22 @@ class InstallPreparationController extends Controller
             return redirect()->route('install');
         }
         return view('installer::perform');
+    }
+
+    /**
+     * Checks if a database exists 
+     * 
+     * @param  Request $request
+     * @return array
+     */
+    public function checkDatabase(Request $request)
+    {
+        $name = $request->get('database', false);
+        if ($name) {
+            if ($this->dbHandler()->databaseExists($name)) {
+                return ['exists' => true];
+            }
+        }
+        return ['exists' => false];
     }
 }

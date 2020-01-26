@@ -7,6 +7,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use PinguInstaller\Http\Middleware\AlreadyInstalled;
 use PinguInstaller\Http\Middleware\RedirectToInstall;
+use Vkovic\LaravelCommando\Providers\CommandoServiceProvider;
 
 class PinguInstallerServiceProvider extends ServiceProvider
 {
@@ -51,6 +52,7 @@ class PinguInstallerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->register(CommandoServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
 
@@ -64,9 +66,6 @@ class PinguInstallerServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../Config/config.php', 'installer'
         );
-        $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('installer.php'),
-        ], 'installer');
     }
 
     /**

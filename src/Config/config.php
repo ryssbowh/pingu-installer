@@ -62,6 +62,5 @@ return [
     'drivers' => [
         'mysql' => 'MySql'
     ],
-    'minNpmVersion' => '6.0.0',
-    'mandatoryModules' => \Module::getCoreModules(true)
+    'minNpmVersion' => '6.0.0'
 ];

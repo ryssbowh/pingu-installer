@@ -1,7 +1,7 @@
 @extends('installer::layout')
 
 @section('body')
-	<div class="card">
+	<div class="card environment">
 	  {{ FormFacade::open() }}
 	  <div class="card-header">
 	    Step 2 : .env file
@@ -26,6 +26,7 @@
 		</div>
 		<div class="form-group">
 		  {{ FormFacade::label('DB_DATABASE', 'Database name') }}
+          <p class="d-none text-warning">This database exists and will be deleted...</p>
 		  {{ FormFacade::text('DB_DATABASE', null, ['class' => 'form-control']) }}
 		</div>
 		<div class="form-group">

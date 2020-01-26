@@ -27,6 +27,9 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('install')
                 ->namespace($this->namespace)
                 ->group(__DIR__ . '/../Routes/web.php');
+            Route::middleware('install')
+                ->namespace($this->namespace)
+                ->group(__DIR__ . '/../Routes/ajax.php');
         }
     }
 }

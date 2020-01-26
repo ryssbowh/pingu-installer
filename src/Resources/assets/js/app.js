@@ -4,6 +4,10 @@ const Install = (() => {
 		if($('.performInstall').length){
 			performStep(0);
 		}
+        if ($('.environment').length) {
+            console.log('df');
+            bindDatabaseField();
+        }
 	};
 
 	function performStep(stepNumber)
@@ -32,6 +36,28 @@ const Install = (() => {
 		$('.error').removeClass('d-none').find('.message').html(data.responseJSON.message);
 		step.find('i').removeClass('fa-check d-none').addClass('fa-times');
 	}
+
+    function bindDatabaseField()
+    {
+        $('#DB_DATABASE').focusout(function(){
+            let name = $(this).val().trim();
+            let input = $(this);
+            if (name == '') {
+                return;
+            }
+            $.ajax({
+                url: '/checkDatabase',
+                dataType: 'json',
+                data: {database: name}
+            }).done(function(data){
+                if (data.exists) {
+                    input.prev().removeClass('d-none');
+                } else {
+                    input.prev().addClass('d-none');
+                }
+            })
+        });
+    }
 
 	return {
 		init:init
