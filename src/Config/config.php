@@ -10,6 +10,7 @@ return [
             'tokenizer',
             'JSON',
             'cURL',
+            'xml'
         ],
         'apache' => [
             'mod_rewrite'
