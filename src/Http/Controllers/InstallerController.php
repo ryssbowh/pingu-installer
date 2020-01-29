@@ -90,9 +90,8 @@ class InstallerController extends Controller
     public function stepModules(Request $request)
     {
         $this->checkSession($request);
-        foreach (\Module::getCoreModules() as $module) {
-            $module->enable();
-        }
+        $this->runArtisanCommand('module:disable-all');
+        $this->runArtisanCommand('module:enable-all');
         foreach (session('installer.modules') as $name) {
             \Module::find($name)->enable();
         }
