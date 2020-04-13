@@ -25,24 +25,26 @@ class PinguInstallerServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
+        if (pingu_installed()) {
+            return;
+        }
+        
         $this->registerConfig();
         $this->registerViews();
         $this->registerAssets();
         /**
          * Creates a new middleware group 'install' and add a installation check on all web routes
          */
-        if(!$this->app->runningInConsole()){
-            $web = $router->getMiddlewareGroups()['web'];
-            foreach($web as $middleware){
-                $router->pushMiddlewareToGroup('install', $middleware);
-            }
-            if(!pingu_installed()){
-                $router->prependMiddlewareToGroup('web', RedirectToInstall::class);
-            }
-
-            \Asset::container('installer')->add('js', 'vendor/installer/installer.js');
-            \Asset::container('installer')->add('css', 'vendor/installer/installer.css');
+        $web = $router->getMiddlewareGroups()['web'];
+        foreach ($web as $middleware) {
+            $router->pushMiddlewareToGroup('install', $middleware);
         }
+        if (!pingu_installed()) {
+            $router->prependMiddlewareToGroup('web', RedirectToInstall::class);
+        }
+
+        \Asset::container('installer')->add('js', 'vendor/installer/installer.js');
+        \Asset::container('installer')->add('css', 'vendor/installer/installer.css');
     }
 
     /**
